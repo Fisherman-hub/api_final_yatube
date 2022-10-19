@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework import mixins
+from rest_framework.pagination import LimitOffsetPagination
 
 from .permissions import ReadOnly, IsOwnerOrReadOnly
 from .serializers import CommentSerializer, FollowSerializer, GroupSerializer, PostSerializer
@@ -33,7 +34,7 @@ class FollowAPIView(mixins.CreateModelMixin,
 
     def get_queryset(self):
         user = self.request.user
-        return user.following.all()
+        return user.follower.all()
 
     def perform_create(self, serializer):
         serializer.save(
@@ -51,6 +52,7 @@ class PostAPIView(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = (IsOwnerOrReadOnly,)
+    pagination_class = LimitOffsetPagination
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
