@@ -45,13 +45,10 @@ class FollowAPIView(viewsets.ModelViewSet):
         )
 
 
-class GroupAPIView(viewsets.ModelViewSet):
+class GroupAPIView(viewsets.ReadOnlyModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = (IsOwnerOrReadOnly,)
-
-    def create(self, serializer):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class PostAPIView(viewsets.ModelViewSet):
